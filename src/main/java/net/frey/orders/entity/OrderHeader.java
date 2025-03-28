@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Set;
+
 @Data
 @Entity
 @AttributeOverrides({
@@ -28,4 +30,7 @@ public class OrderHeader extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    @OneToMany(mappedBy = "orderHeader")
+    Set<OrderLine> orderLines;
 }
