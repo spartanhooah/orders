@@ -35,4 +35,13 @@ class ProductRepositoryTest extends Specification {
         fetched.createdDate
         fetched.lastModifiedDate
     }
+
+    def "Get category"() {
+        when:
+        def product = productRepository.findByDescription("PRODUCT1")
+
+        then:
+        product
+        product.categories
+    }
 }

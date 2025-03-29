@@ -1,6 +1,8 @@
 package net.frey.orders.repository;
 
 import net.frey.orders.entity.Product;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository extends CrudRepository<Product, Long> {}
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    Product findByDescription(String description);
+}

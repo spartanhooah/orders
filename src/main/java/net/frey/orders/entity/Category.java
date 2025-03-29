@@ -1,9 +1,11 @@
 package net.frey.orders.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import java.util.Objects;
-import lombok.EqualsAndHashCode;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -15,15 +17,16 @@ import org.hibernate.proxy.HibernateProxy;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class OrderLine extends BaseEntity {
-    private Integer quantityOrdered;
+public class Category extends BaseEntity {
+    private String description;
 
-    @ManyToOne
-    @EqualsAndHashCode.Exclude
-    private OrderHeader orderHeader;
-
-    @ManyToOne
-    private Product product;
+    @ManyToMany
+    @JoinTable(
+            name = "product_category",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @ToString.Exclude
+    private Set<Product> products;
 
     @Override
     public final boolean equals(Object o) {
@@ -36,8 +39,8 @@ public class OrderLine extends BaseEntity {
                 ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
                 : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        OrderLine orderLine = (OrderLine) o;
-        return getId() != null && Objects.equals(getId(), orderLine.getId());
+        Category category = (Category) o;
+        return getId() != null && Objects.equals(getId(), category.getId());
     }
 
     @Override
