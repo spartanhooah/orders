@@ -1,10 +1,7 @@
 package net.frey.orders.repository
 
-import net.frey.orders.entity.Customer
-import net.frey.orders.entity.OrderHeader
-import net.frey.orders.entity.OrderLine
-import net.frey.orders.entity.Product
-import net.frey.orders.entity.ProductStatus
+
+import net.frey.orders.entity.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -21,6 +18,9 @@ class OrderHeaderRepositoryTest extends Specification {
     @Autowired
     ProductRepository productRepository
 
+    @Autowired
+    CustomerRepository customerRepository
+
     Product product
 
     void setup() {
@@ -30,7 +30,8 @@ class OrderHeaderRepositoryTest extends Specification {
 
     def "test save order"() {
         given:
-        def orderHeader = new OrderHeader(customer: new Customer(name: "New Customer"))
+        def approval = new OrderApproval(approvedBy: "Me")
+        def orderHeader = new OrderHeader(customer: new Customer(name: "New Customer"), orderApproval: approval)
 
         when:
         def saved = orderHeaderRepository.save(orderHeader)
@@ -47,6 +48,7 @@ class OrderHeaderRepositoryTest extends Specification {
         fetched.id == saved.id
         fetched.createdDate
         fetched.lastModifiedDate
+        approval.approvedBy == "Me"
     }
 
     def "save order with order line"() {
@@ -71,5 +73,24 @@ class OrderHeaderRepositoryTest extends Specification {
         fetched.createdDate
         fetched.lastModifiedDate
         fetched.orderLines.size() == 1
+    }
+
+    def "test delete cascade"() {
+        given:
+        def customer = customerRepository.save(new Customer(name: "New Customer"))
+        def orderLine = new OrderLine(quantityOrdered: 3, product: product)
+        def orderHeader = new OrderHeader(customer: customer)
+        orderHeader.addOrderLine(orderLine)
+
+        def savedOrder = orderHeaderRepository.save(orderHeader)
+
+        orderHeaderRepository.deleteById(savedOrder.id)
+        orderHeaderRepository.flush()
+
+        when:
+        def empty = orderHeaderRepository.findById(savedOrder.id)
+
+        then:
+        empty.isEmpty()
     }
 }

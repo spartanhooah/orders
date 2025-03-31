@@ -1,24 +1,10 @@
 package net.frey.orders.entity;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.proxy.HibernateProxy;
+import lombok.*;
 
 @Entity
 @Getter
@@ -49,9 +35,14 @@ public class OrderHeader extends BaseEntity {
     private OrderStatus orderStatus;
 
     @Setter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
+    @OneToMany(
+            mappedBy = "orderHeader",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @ToString.Exclude
     Set<OrderLine> orderLines;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private OrderApproval orderApproval;
 
     public void addOrderLine(OrderLine orderLine) {
         if (orderLines == null) {
@@ -63,27 +54,18 @@ public class OrderHeader extends BaseEntity {
     }
 
     @Override
-    public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy
-                ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-                : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy
-                ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
-                : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
         OrderHeader that = (OrderHeader) o;
-        return getId() != null && Objects.equals(getId(), that.getId());
+        return Objects.equals(customer, that.customer)
+                && Objects.equals(shippingAddress, that.shippingAddress)
+                && Objects.equals(billingAddress, that.billingAddress)
+                && orderStatus == that.orderStatus
+                && Objects.equals(orderApproval, that.orderApproval);
     }
 
     @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy
-                ? ((HibernateProxy) this)
-                        .getHibernateLazyInitializer()
-                        .getPersistentClass()
-                        .hashCode()
-                : getClass().hashCode();
+    public int hashCode() {
+        return Objects.hash(customer, shippingAddress, billingAddress, orderStatus, orderApproval);
     }
 }
