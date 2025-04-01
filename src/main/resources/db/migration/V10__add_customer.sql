@@ -13,7 +13,7 @@ create table customer(
 
 alter table order_header add column customer_id bigint;
 
-alter table order_header add constraint order_customer_fk foreign key (customer_id) references order_header(id);
+alter table order_header add constraint order_customer_fk foreign key (customer_id) references customer(id);
 
 alter table order_header drop column customer_name;
 
