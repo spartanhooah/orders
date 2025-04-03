@@ -41,7 +41,9 @@ public class OrderHeader extends BaseEntity {
     @ToString.Exclude
     Set<OrderLine> orderLines;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            mappedBy = "orderHeader")
     private OrderApproval orderApproval;
 
     public void addOrderLine(OrderLine orderLine) {
@@ -51,6 +53,11 @@ public class OrderHeader extends BaseEntity {
 
         orderLines.add(orderLine);
         orderLine.setOrderHeader(this);
+    }
+
+    public void setOrderApproval(OrderApproval orderApproval) {
+        this.orderApproval = orderApproval;
+        orderApproval.setOrderHeader(this);
     }
 
     @Override

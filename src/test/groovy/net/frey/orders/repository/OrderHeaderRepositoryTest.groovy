@@ -79,7 +79,8 @@ class OrderHeaderRepositoryTest extends Specification {
         given:
         def customer = customerRepository.save(new Customer(name: "New Customer"))
         def orderLine = new OrderLine(quantityOrdered: 3, product: product)
-        def orderHeader = new OrderHeader(customer: customer)
+        def orderApproval = new OrderApproval(approvedBy: "me")
+        def orderHeader = new OrderHeader(customer: customer, orderApproval: orderApproval)
         orderHeader.addOrderLine(orderLine)
 
         def savedOrder = orderHeaderRepository.save(orderHeader)

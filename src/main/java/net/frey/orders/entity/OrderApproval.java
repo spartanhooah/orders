@@ -1,12 +1,12 @@
 package net.frey.orders.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -15,6 +15,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class OrderApproval extends BaseEntity {
     private String approvedBy;
+
+    @OneToOne
+    private OrderHeader orderHeader;
 
     @Override
     public boolean equals(Object o) {
