@@ -38,7 +38,7 @@ class ProductRepositoryTest extends Specification {
 
     def "Get category"() {
         when:
-        def product = productRepository.findByDescription("PRODUCT1")
+        def product = productRepository.findByDescription("PRODUCT1").get()
 
         then:
         product

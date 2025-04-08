@@ -36,9 +36,10 @@ class DataLoadTest extends Specification {
     @Autowired
     ProductRepository productRepository
 
-    @Ignore
+    @Ignore("only used to load dummy data")
     @Rollback(value = false)
     def "test data loader"() {
+        given:
         def products = loadProducts()
         def customer = loadCustomers()
 
@@ -47,7 +48,19 @@ class DataLoadTest extends Specification {
             saveOrder(customer, products)
         }
 
+        expect:
         orderHeaderRepository.flush()
+    }
+
+    def "demonstrate lazy vs eager fetching"() {
+        given:
+        def header = orderHeaderRepository.getReferenceById(9)
+
+        println "Order ID is $header.id"
+        println "Customer name is $header.customer.name"
+
+        expect:
+        true
     }
 
     private def saveOrder(def customer, def products) {
@@ -57,7 +70,6 @@ class DataLoadTest extends Specification {
 
         products.each {
             def orderLine = new OrderLine(product: it, quantityOrdered: random.nextInt(20))
-            //orderHeader.getOrderLines().add(orderLine)
             orderHeader.addOrderLine(orderLine)
         }
 
@@ -69,8 +81,8 @@ class DataLoadTest extends Specification {
     }
 
     private def getOrSaveCustomer(String customerName) {
-        return customerRepository.findCustomerByCustomerNameIgnoreCase(customerName)
-            .orElseGet(() -> {
+        return customerRepository.findCustomerByNameIgnoreCase(customerName)
+            .orElseGet {
                 def c1 = new Customer(
                     name: customerName,
                     email: "test@example.com",
@@ -83,7 +95,7 @@ class DataLoadTest extends Specification {
                 )
 
                 return customerRepository.save(c1)
-            })
+            }
     }
 
     private def loadProducts() {
@@ -96,10 +108,10 @@ class DataLoadTest extends Specification {
 
     private def getOrSaveProduct(String description) {
         productRepository.findByDescription(description)
-            .orElseGet(() -> {
+            .orElseGet {
                 def p1 = new Product(description: description, productStatus: ProductStatus.NEW)
 
                 return productRepository.save(p1)
-            })
+            }
     }
 }
