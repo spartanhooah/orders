@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Getter
@@ -37,13 +39,14 @@ public class OrderHeader extends BaseEntity {
     @Setter(AccessLevel.NONE)
     @OneToMany(
             mappedBy = "orderHeader",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     @ToString.Exclude
     Set<OrderLine> orderLines;
 
-    @OneToOne(
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            mappedBy = "orderHeader")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @Fetch(FetchMode.SELECT)
     private OrderApproval orderApproval;
 
     public void addOrderLine(OrderLine orderLine) {
