@@ -1,11 +1,11 @@
 package net.frey.orders.entity;
 
 import jakarta.persistence.Embeddable;
-import org.hibernate.validator.constraints.Length;
+import jakarta.validation.constraints.Size;
 
 @Embeddable
 public record Address(
-        @Length(max = 30) String streetAddress,
-        @Length(max = 30) String city,
-        @Length(max = 30) String state,
-        @Length(max = 30) String zipCode) {}
+        @Size(max = 30) String streetAddress,
+        @Size(max = 30) String city,
+        @Size(max = 30) String state,
+        @Size(max = 30) String zipCode) {}
