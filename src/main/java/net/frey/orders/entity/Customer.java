@@ -4,14 +4,17 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
+
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,12 +22,17 @@ import lombok.ToString;
 @ToString
 @RequiredArgsConstructor
 public class Customer extends BaseEntity {
+    @Length(max = 50)
     private String name;
 
+    @Valid
     @Embedded
     private Address address;
 
+    @Length(max = 20)
     private String phone;
+
+    @Length(max = 255)
     private String email;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
