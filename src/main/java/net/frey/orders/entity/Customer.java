@@ -7,15 +7,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Getter
