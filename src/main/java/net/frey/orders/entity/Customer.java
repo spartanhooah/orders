@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Version;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -40,6 +41,9 @@ public class Customer extends BaseEntity {
     @ToString.Exclude
     @Setter(AccessLevel.NONE)
     private Set<OrderHeader> orderHeaders = new LinkedHashSet<>();
+
+    @Version
+    private Integer version;
 
     public void addOrderHeader(OrderHeader orderHeader) {
         orderHeaders.add(orderHeader);
