@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Version;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -63,6 +64,9 @@ public class OrderHeader extends BaseEntity {
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @Fetch(FetchMode.SELECT)
     private OrderApproval orderApproval;
+
+    @Version
+    private Integer version;
 
     public void addOrderLine(OrderLine orderLine) {
         if (orderLines == null) {

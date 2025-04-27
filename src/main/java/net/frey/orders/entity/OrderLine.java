@@ -2,6 +2,7 @@ package net.frey.orders.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 import java.util.Objects;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class OrderLine extends BaseEntity {
 
     @ManyToOne
     private Product product;
+
+    @Version
+    private Integer version;
 
     @Override
     public final boolean equals(Object o) {

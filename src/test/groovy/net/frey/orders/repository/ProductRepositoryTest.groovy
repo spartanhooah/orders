@@ -44,4 +44,24 @@ class ProductRepositoryTest extends Specification {
         product
         product.categories
     }
+
+    def "Test quantity on hand"() {
+        given:
+        def product = new Product(description: "Widget", productStatus: ProductStatus.IN_STOCK, quantityOnHand: 15)
+
+        when:
+        def savedProduct = productRepository.saveAndFlush(product)
+
+        then:
+        savedProduct
+
+        and:
+        when:
+        savedProduct.quantityOnHand = 5
+
+        def savedAgain = productRepository.saveAndFlush(savedProduct)
+
+        then:
+        savedAgain.quantityOnHand == 5
+    }
 }

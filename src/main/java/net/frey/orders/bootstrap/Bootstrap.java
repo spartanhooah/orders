@@ -1,6 +1,5 @@
 package net.frey.orders.bootstrap;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.frey.orders.entity.Customer;
 import net.frey.orders.repository.CustomerRepository;
@@ -46,7 +45,6 @@ public class Bootstrap implements CommandLineRunner {
 
         System.out.println("Customer version " + savedCustomer3.getVersion());
 
-        customerRepository.deleteAllById(
-                List.of(savedCustomer.getId(), savedCustomer2.getId(), savedCustomer3.getId()));
+        customerRepository.delete(savedCustomer3);
     }
 }
