@@ -5,7 +5,7 @@ plugins {
 	id("org.springframework.boot") version "3.4.5"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("io.freefair.lombok") version "8.13.1"
-	id("com.diffplug.spotless") version "7.0.2"
+	id("com.diffplug.spotless") version "7.0.3"
 	id("com.github.ben-manes.versions") version "0.52.0"
 }
 
@@ -55,7 +55,7 @@ tasks.withType<DependencyUpdatesTask> {
 }
 
 tasks.wrapper {
-	gradleVersion = "8.13"
+	gradleVersion = "8.14"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
